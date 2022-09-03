@@ -1,18 +1,20 @@
-#from calc_tax import *
+# from calc_tax import *
 from tkinter import *
+from tax_class import tax
 
 
 class terminal():
+
     def __init__(self):
 
         self.income_field_label = None
         self.state = None
         self.list_state = None
         self.calc_box_btn = None
-        self.root = Tk()    #создание окна
-        self.root.title('Fed tax')  #создание титульной надписи
-        self.root.minsize(500, 400)  #минимальный размер окна
-        self.create_ent()   #создание поля ввода
+        self.root = Tk()  # создание окна
+        self.root.title('Fed tax')  # создание титульной надписи
+        self.root.minsize(500, 400)  # минимальный размер окна
+        self.create_ent()  # создание поля ввода
         self.create_income_field()
 
         self.income_field_label.pack()
@@ -25,20 +27,22 @@ class terminal():
         self.root.mainloop()
 
     def create_ent(self):
-        self.state = ['California', 'Texas', 'New York', 'Не указывать штат']
+        self.state = ['Калифорния', 'Техас', 'Нью Йорк', 'Не указывать штат']
         self.list_state = StringVar()
         self.list_state.set(self.state[0])
 
         self.state_label = Label(text="Выберите свой штат")
-        self.variants = OptionMenu(
-            self.root, self.list_state, *self.state,
-            command = self.variants_event_listener)
+        self.variants = OptionMenu(self.root,
+                                   self.list_state,
+                                   *self.state,
+                                   command=self.variants_event_listener)
 
     def variants_event_listener(self, value):
         self.list_state.set(value)
 
     def create_income_field(self):
-        self.income_field_label = Label(text="Введите свой среднемесячный доход:")
+        self.income_field_label = Label(
+            text="Введите свой среднемесячный доход:")
         self.income_field = Entry()
         self.income_field_space = Label()
 
@@ -53,6 +57,10 @@ class terminal():
         is_valid = self.validate_income()
         if is_valid:
             self.income_field.config({"background": "green"})
+            income = float(self.income_field.get())
+            state = self.list_state.get()
+            messages = tax(income, state).get_message()
+            self.place_tax_message_text(messages)
         else:
             self.income_field.config({"background": "red"})
 
@@ -64,40 +72,12 @@ class terminal():
         except:
             return False
 
-
-
-
+    def place_tax_message_text(self, messages):
+        empty_label = Label()
+        empty_label.pack()
+        for message in messages:
+            tax_label = Label(text=message)
+            tax_label.pack()
 
 
 terminal()
-
-
-def calc_tax(self):
-    income_year = 12 * float(income)
-    if lim_1 >= income_year:
-        return calc_lim_1_tax(income_year)
-    if lim_1 < income_year <= lim_2:
-        return calc_lim_2_tax(income_year)
-    if lim_2 < income_year <= lim_3:
-        return calc_lim_3_tax(income_year)
-    if lim_3 < income_year <= lim_4:
-        return calc_lim_4_tax(income_year)
-    if lim_4 < income_year <= lim_5:
-        return calc_lim_5_tax(income_year)
-    if lim_5 < income_year <= lim_6:
-        return calc_lim_6_tax(income_year)
-    if lim_6 < income_year:
-        return calc_lim_7_tax(income_year)
-
-
-
-def print_tax(self):
-            if self.countries_state[0]:
-                print("\nСумма федерального налога за год: " + f'{round(calc_tax(), 2)}' + "$")
-
-            if self.countries_state[1]:
-                print("\nСумма федерального налога за год: " + f'{round(calc_tax(), 2)}' + "$")
-
-            if self.countries_state[2]:
-                print("\nСумма федерального налога за год: " + f'{round(calc_tax(), 2)}' + "$")
-
